@@ -68,5 +68,13 @@ for nome_piatto, n_da_preparare in diz_resoconto.items():
 
 # 2. Prepariamo la lista della spesa
 # 2.1 Capiamo qual è l'elenco completo di tutti gli ingredienti
-# 2.2 Capiamo quali ingredienti "unici" dobbiamo comprare
-# 2.3 Stampiamo la lista degli ingredienti unici (lista della spesa)
+set_elenco = set()
+for ricetta in ricettario.values():
+    set_elenco.update(ricetta)
+print("-*-" * 25 + "\n")  # Stampiamo un separatore
+
+# 2.2 Stampiamo la lista degli ingredienti unici (lista della spesa)
+print("Ingredienti da comprare: ")
+for ingrediente in set_elenco:
+    print(f" * {ingrediente}")
+
