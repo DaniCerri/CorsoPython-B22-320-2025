@@ -26,7 +26,7 @@ lista_partecipanti = []   # Creiamo una lista vuota in cui mettiamo i partecipan
 # 1.2. Facciamo un ciclo attraverso le registrazioni
 for registrazione in registrazioni:
     # 1.3. Se non abbiamo già salvato la persona, ce la salviamo
-    if registrazione['email'] not in set_partecipanti:
+    if registrazione['email'] not in set_partecipanti:  # Ci chiediamo se la mail NON è all'interno del set con le mail viste finora
         set_partecipanti.add(registrazione['email'])  # Salviamo la mail nel set, per i prossimi controlli
         lista_partecipanti.append(registrazione)  # Salviamo tutti i dati del nuovo partecipante
 
@@ -38,3 +38,30 @@ for indice, partecipazione in enumerate(lista_partecipanti):
     print(f" * Email: {partecipazione['email']}")
 
 # 2. Creiamo l'elenco di aziende con il numero di partecipanti
+# 2.1 Creiamo un dizionario vuoto in cui salveremo le coppie "azienda: n_partecipanti_dell_azienda"
+diz_affluenza_aziende = {}  # Creiamo un dizionario vuoto in cui salveremo i conteggi delle persone per ogni azienda
+
+# 2.2 Per ogni persona unica, aggiorniamo il contatore associata alla sua azienda nel dizionario
+for partecipazione in lista_partecipanti:
+    # Se abbiamo già visto l'azienda, prendiamo il dizionario alla chiave nome_azienda e incrementiamo il conteggio di 1
+    # Se non abbiamo mai visto l'azienda (all'interno di questo for), creiamo la coppia nome_azienda: 1
+    nome_azienda = partecipazione['azienda']  # Mettiamo il nome dell'azienda in una variabile
+
+    # Cerchiamo di ottenere il numero di persone che abbiamo visto finora che lavorano per l'azienda della persona attuale.
+    # Se troviamo questa azienda nel dizionario, otteniamo il numero, altrimenti, vuol dire che non avevamo ancora trovato
+    # nessuna persona che lavora per questa azienda, quindi il contatore vale 0
+    contatore_azienda = diz_affluenza_aziende.get(nome_azienda, 0)
+
+    # Siccome abbiamo trovato ora una persona in più che lavora per questa azienda, incrementiamo il contatore di 1
+    contatore_azienda += 1  # -> contatore_azienda = contatore_azienda + 1
+
+    # Aggiorniamo il valore all'interno del dizionario
+    diz_affluenza_aziende[nome_azienda] = contatore_azienda
+
+# 2.3 Stampiamo il resoconto con le aziende partecipanti
+for azienda, n_persone in diz_affluenza_aziende.items():
+    # TODO: Gestire il print se la persona è una sola
+    print(f"Per l'azienda {azienda} verranno {n_persone} persone")
+
+
+
