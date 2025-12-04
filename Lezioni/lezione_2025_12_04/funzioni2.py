@@ -3,15 +3,26 @@ Dato un elenco di fatture, andiamo a calcolare imposte, guadagni, etc.
 """
 import datetime # Importiamo la libreria di funzioni per gestire le date
 
-def calcola_fatturato_totale(elenco_fatture: list[dict]) -> float:
+FATTURATO_TOTALE = 1
+FATTURATO_INCASSATO = 2
+FATTURATO_DA_INCASSARE = 3
+
+def calcola_fatturato_totale(elenco_fatture: list[dict], tipologia: int) -> float:
     """
     Calcola il totale del fatturato di un elenco di dizionari "fattura"
+    :param tipologia: Tipologia di calcolo del fatturato -> da costanti
     :param elenco_fatture: Lista di dizionari "fattura"
     :return: fatturato totale, float
     """
     tot = 0  # inizializziamo il totale a 0
     for fattura in elenco_fatture:
-        tot += fattura.get("importo", 0)  # Proviamo a prendere l'importo, altrimenti mettiamo uno 0
+        totale_selezionato = tipologia == FATTURATO_TOTALE
+        solo_incassate = tipologia == FATTURATO_INCASSATO and fattura['pagata']
+        solo_da_incassare = tipologia == FATTURATO_DA_INCASSARE and not fattura['pagata']
+        da_aggiungere = totale_selezionato or solo_incassate or solo_da_incassare
+
+        if da_aggiungere:
+            tot += fattura.get("importo", 0)  # Proviamo a prendere l'importo, altrimenti mettiamo uno 0
 
     return tot  # Restituiamo il totale
 
@@ -37,6 +48,7 @@ def converti_date(elenco_fatture: list[dict]) -> list[dict]:
     for i, fattura in enumerate(elenco_fatture):
         # Sovrascriviamo la data della fattura che era in formato stringa con quella in formato "data"
         fattura['data'] = converti_data(fattura['data'])
+        fattura['scadenza'] = converti_data(fattura['scadenza'])
 
         # Sovrascriviamo la fattura che aveva la data stringa con quella con la data "data"
         elenco_fatture[i] = fattura
@@ -56,7 +68,22 @@ def calcola_delta_tempo_fatture(elenco_fatture: list[dict]) -> int:
     prima_data = min(lista_date)
     ultima_data = max(lista_date)
 
-    return ultima_data - prima_data  # Calcoliamo "implicitamente" i giorni di differenza tra le date
+    return (ultima_data - prima_data).days  # Calcoliamo "implicitamente" i giorni di differenza tra le date
+
+def calcolo_delta_giorni_scadenza(elenco_fatture: list[dict]) -> list[dict]:
+    """
+    Data ogni fattura calcola il numero di giorni (intero) che mancano da oggi alla scadenza
+    :param elenco_fatture: Lista di dizionari "fattura"
+    :return: Lista orginale in cui ogni fattura ha la nuova chiave "giorni-a-scadenza" e valore numero di giorni
+    """
+    oggi = datetime.datetime.now()  # Otteniamo la data di oggi
+    for i, fattura in enumerate(elenco_fatture):
+        delta_giorni = fattura['scadenza'] - oggi
+        fattura['giorni-a-scadenza'] = delta_giorni.days
+        elenco_fatture[i] = fattura
+
+        # elenco_fatture[i]['giorni-a-scadenza'] = fattura['scadenza'] - oggi
+    return elenco_fatture
 
 if __name__ == "__main__":
     lista_fatture = [
@@ -151,3 +178,7 @@ if __name__ == "__main__":
             "pagata": False
         }
     ]
+    lista_fatture = converti_date(lista_fatture)
+    print(f"Giorni dalla prima all'ultima fattura: {calcola_delta_tempo_fatture(lista_fatture)}")
+    lista_fatture = calcolo_delta_giorni_scadenza(lista_fatture)
+    print(lista_fatture)
