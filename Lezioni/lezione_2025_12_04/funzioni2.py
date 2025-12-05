@@ -3,9 +3,14 @@ Dato un elenco di fatture, andiamo a calcolare imposte, guadagni, etc.
 """
 import datetime # Importiamo la libreria di funzioni per gestire le date
 
+
 FATTURATO_TOTALE = 1
 FATTURATO_INCASSATO = 2
 FATTURATO_DA_INCASSARE = 3
+
+COEFF_IMPONIBILE = 0.67
+COEFF_INPS = 0.2667
+COEFF_IRPEF = 0.05
 
 def calcola_fatturato_totale(elenco_fatture: list[dict], tipologia: int) -> float:
     """
@@ -26,13 +31,26 @@ def calcola_fatturato_totale(elenco_fatture: list[dict], tipologia: int) -> floa
 
     return tot  # Restituiamo il totale
 
-def calcola_fatturato_medio(elenco_fatture: list[dict]) -> float:
+def calcola_fatturato_medio(elenco_fatture: list[dict], tipologia: int) -> float:
     """
     Calcola l'importo medio delle fatture
+    :param tipologia: Tipologia di calcolo della media -> da costanti
     :param elenco_fatture: Lista di dizionari "fattura"
     :return: valore medio dell'importo delle fatture, float
     """
-    media = calcola_fatturato_totale(elenco_fatture) / len(elenco_fatture)
+    # Dobbiamo capire quale numero di fatture considerare per la media
+    numero = 0
+    for fattura in elenco_fatture:
+        totale_selezionato = tipologia == FATTURATO_TOTALE
+        solo_incassate = tipologia == FATTURATO_INCASSATO and fattura['pagata']
+        solo_da_incassare = tipologia == FATTURATO_DA_INCASSARE and not fattura['pagata']
+        da_aggiungere = totale_selezionato or solo_incassate or solo_da_incassare
+        if da_aggiungere:
+            numero += 1
+        # TODO: si potrebbe fare una funzione che filtra le fattura e ne restituisce
+        #  una lista di quelle che ci interessano
+
+    media = calcola_fatturato_totale(elenco_fatture, tipologia) / numero
     return media
 
 def converti_data(data: str):
@@ -84,6 +102,36 @@ def calcolo_delta_giorni_scadenza(elenco_fatture: list[dict]) -> list[dict]:
 
         # elenco_fatture[i]['giorni-a-scadenza'] = fattura['scadenza'] - oggi
     return elenco_fatture
+
+def distribuzione_scadenze(elenco_fatture: list[dict]) -> tuple[int, int, int]:
+    """
+    Calcola le seguenti statistiche:
+    * numero di fatture per cui dobbiamo aspettare la scadenza
+    * numero fatture scadute non pagate
+    * numero fatture pagate
+
+    :param elenco_fatture: Lista di dizionari "fattura"
+    :return: parametri calcolati, tupla di 3 interi
+    """
+    fatture_da_attendere = 0
+    fatture_scadute = 0
+    fatture_pagate = 0
+
+    for fattura in elenco_fatture:
+        if fattura['pagata']:
+            fatture_pagate += 1
+        elif fattura['giorni-a-scadenza'] >= 0:
+            fatture_da_attendere += 1
+        else:
+            fatture_scadute += 1
+
+    return fatture_da_attendere, fatture_scadute, fatture_pagate
+
+def calcola_netto_e_tasse(lordo: float):
+    tasse_inps = lordo * COEFF_IMPONIBILE * COEFF_INPS
+    tasse_irpef = lordo * COEFF_IMPONIBILE * COEFF_IRPEF
+    netto = lordo - (tasse_inps + tasse_irpef)
+    return tasse_inps, tasse_irpef, netto
 
 if __name__ == "__main__":
     lista_fatture = [
