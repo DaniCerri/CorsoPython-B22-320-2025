@@ -43,7 +43,22 @@ def somma_dispari(num: int) -> int:
 Scrivere una funzione che dato un numero >= 0 calcoli la somma dei pari fino a quel numero (compreso)
 """
 def somma_pari(num: int) -> int:
-    ...
+    if num % 2 == 1:
+        num -= 1
+    return (num // 2) * (num // 2 + 1)
+
+"""
+Scrivere una funzione che dato un numero restituisce True se è primo, False altrimenti
+"""
+def is_primo(num: int) -> bool:
+    if num < 2:
+        return False
+
+    for i in range(2, round(num ** (1/2)) + 1):
+        if num % i == 0:
+            return False
+
+    return True
 
 if __name__ == "__main__":
     # Test delle funzioni
@@ -52,6 +67,6 @@ if __name__ == "__main__":
     # <- ["AAAA", "4", "17", "BBBB", "AABB", "BBBB", "23", "AAAA", "AAAA"]
 
     print(f"Mancante nel range: {trova_mancante([3, 0, 1, 5, 2, 7, 4])}")
-    massimo = 6
+    massimo = 7
     print(f"Somma numeri dispari fino a {massimo}: {somma_dispari(massimo)}")
-    # print(f"Somma numeri pari fino a {massimo}: {somma_pari(massimo)}")
+    print(f"Somma numeri pari fino a {massimo}: {somma_pari(massimo)}")
