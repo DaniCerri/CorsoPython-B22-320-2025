@@ -1,7 +1,4 @@
 [
-  {"id": 1, "data": "2025-01-10", "cliente": "Alpha Tech Srl", "descrizione": "Consulenza Architettura AI", "importo": 1200.00},
-  {"id": 2, "data": "2025-01-15", "cliente": "Mario Rossi", "descrizione": "Sviluppo Landing Page React", "importo": 800.00},
-  {"id": 3, "data": "2025-01-28", "cliente": "StartUp Innovative", "descrizione": "Setup ambiente Docker e CI/CD", "importo": 500.00},
   {"id": 4, "data": "2025-02-05", "cliente": "Alpha Tech Srl", "descrizione": "Implementazione RAG su documenti PDF", "importo": 1500.00},
   {"id": 5, "data": "2025-02-12", "cliente": "Studio Legale Bianchi", "descrizione": "Automazione email con Python", "importo": 350.00},
   {"id": 6, "data": "2025-02-25", "cliente": "E-commerce Pro", "descrizione": "Debug checkout React", "importo": 600.00},
