@@ -1,0 +1,22 @@
+[
+  {"nome": "Pasta Integrale", "prezzo": 1.20, "sono_allergico": false},
+  {"nome": "Pesto alle Noci", "prezzo": 2.90, "sono_allergico": true},
+  {"nome": "Pane di Segale", "prezzo": 1.80, "sono_allergico": false},
+  {"nome": "Finocchi freschi", "prezzo": 1.50, "sono_allergico": true},
+  {"nome": "Mele Royal", "prezzo": 2.10, "sono_allergico": false},
+  {"nome": "Noci Sgusciate", "prezzo": 4.50, "sono_allergico": true},
+  {"nome": "Latte di Mandorla", "prezzo": 2.30, "sono_allergico": true},
+  {"nome": "Biscotti al Cioccolato", "prezzo": 3.20, "sono_allergico": false},
+  {"nome": "Taralli al Finocchietto", "prezzo": 1.90, "sono_allergico": true},
+  {"nome": "Passata di Pomodoro", "prezzo": 0.90, "sono_allergico": false},
+  {"nome": "Anacardi Tostati", "prezzo": 3.80, "sono_allergico": true},
+  {"nome": "Riso Basmati", "prezzo": 2.40, "sono_allergico": false},
+  {"nome": "Yogurt Greco", "prezzo": 1.10, "sono_allergico": false},
+  {"nome": "Pistacchi Salati", "prezzo": 5.00, "sono_allergico": true},
+  {"nome": "Uova Bio (6)", "prezzo": 2.50, "sono_allergico": false},
+  {"nome": "Insalata mista", "prezzo": 1.30, "sono_allergico": false},
+  {"nome": "Granola con nocciole", "prezzo": 3.90, "sono_allergico": true},
+  {"nome": "Pollo a fette", "prezzo": 4.20, "sono_allergico": false},
+  {"nome": "Tisana al finocchio", "prezzo": 2.80, "sono_allergico": true},
+  {"nome": "Cioccolato Fondente", "prezzo": 1.50, "sono_allergico": false}
+]
