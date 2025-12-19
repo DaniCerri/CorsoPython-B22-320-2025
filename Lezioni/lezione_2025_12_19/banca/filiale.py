@@ -22,10 +22,7 @@ class Filiale:
         return True
 
     def deposito_totale(self):
-        totale = 0
-        for conto in self.conti_correnti:
-            totale += conto.importo
-        return totale
+        return sum(self.conti_correnti)
 
     def __str__(self):
         output = f"Nome filiale: {self.nome}\n"
