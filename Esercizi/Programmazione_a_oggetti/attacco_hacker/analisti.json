@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Cipher",
+    "specialization": "Network",
+    "skill_level": 9,
+    "stress_level": 0
+  },
+  {
+    "name": "Enigma",
+    "specialization": "Crypto",
+    "skill_level": 8,
+    "stress_level": 0
+  },
+  {
+    "name": "Chatter",
+    "specialization": "Social",
+    "skill_level": 7,
+    "stress_level": 0
+  },
+  {
+    "name": "Noob",
+    "specialization": "Network",
+    "skill_level": 5,
+    "stress_level": 0
+  }
+]
