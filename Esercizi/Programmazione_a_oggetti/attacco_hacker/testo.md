@@ -1,17 +1,44 @@
 # Security Operation Center
 
-Sei il responsabile di un SOC di cybersecurity che deve gestire un'ondata di attacchi hacker in tempo reale. 
-Il tuo compito è smistare le minacce agli analisti corretti prima che i sistemi crollino. 
-Hai bisogno di tre classi: 
-* Analyst: l'esperto umano, che ha un nome, una specializzazione tra Network, Crypto o Social, un livello di "Skill" da 
-1 a 10 e un livello di "Stress" che parte da 0
-* Threat: la minaccia, definita da un tipo, una gravità da 1 a 10 e un ID
-* DefenseGrid: il sistema centrale 
+## Contesto
+Sei il responsabile di un SOC di cybersecurity che deve gestire un'ondata di attacchi hacker in tempo reale. Il tuo compito è smistare le minacce agli analisti corretti prima che i sistemi crollino.
 
-Il tuo script deve caricare le minacce dal JSON e assegnarle. La logica è la seguente: ogni minaccia deve essere 
-assegnata a un analista con la specializzazione corrispondente. 
-Se l'analista ha una Skill >= Gravità della minaccia, la neutralizza (successo) ma il suo stress aumenta di 1. 
-Se la Skill < Gravità, la minaccia "buca" il sistema (fallimento) e lo stress dell'analista aumenta di 5 per la 
-frustrazione. Se lo stress di un analista supera 10, va in burnout e non può più accettare ticket. 
-L'obiettivo è processare l'intera lista e stampare un report finale con: minacce sventate vs subite e lo stato 
-di salute mentale del team.
+## Classi da implementare
+
+Hai bisogno di tre classi:
+
+- **`Analyst`**: l'esperto umano
+  - Nome
+  - Specializzazione: Network, Crypto o Social
+  - Livello di Skill: da 1 a 10
+  - Livello di Stress: parte da 0
+
+- **`Threat`**: la minaccia
+  - Tipo (Network, Crypto, Social)
+  - Gravità: da 1 a 10
+  - ID univoco
+
+- **`DefenseGrid`**: il sistema centrale di gestione
+
+## Logica di assegnamento
+
+Il tuo script deve caricare le minacce dal JSON e assegnarle seguendo queste regole:
+
+1. Ogni minaccia deve essere assegnata a un analista con la **specializzazione corrispondente**
+
+2. **Se Skill >= Gravità della minaccia**:
+   - La minaccia viene neutralizzata (successo)
+   - Lo stress dell'analista aumenta di **+1**
+
+3. **Se Skill < Gravità**:
+   - La minaccia "buca" il sistema (fallimento)
+   - Lo stress dell'analista aumenta di **+5** per la frustrazione
+
+4. **Burnout**: se lo stress di un analista supera **10**, va in burnout e non può più accettare ticket
+
+## Report finale
+
+L'obiettivo è processare l'intera lista e stampare un report finale con:
+
+1. Minacce sventate vs minacce subite
+2. Lo stato di salute mentale del team (stress di ogni analista)
