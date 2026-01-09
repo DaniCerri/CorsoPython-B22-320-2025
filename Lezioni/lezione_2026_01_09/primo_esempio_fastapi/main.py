@@ -44,7 +44,14 @@ def get_piatto_da_id(id_piatto: int):
     return MENU[id_piatto]
 
 # Provare a fare una funzione che restituisca solo i piatti che costano meno di un prezzo dato
-"/menu/under/{}"
+@app.get("/menu/under/{prezzo_max}")
+def get_under_prezzo_max(prezzo_max: float):
+    lista_piatti = []
+    for piatto in MENU.values():
+        if piatto['prezzo'] < prezzo_max:
+            lista_piatti.append(piatto)
+
+    return lista_piatti
 
 
 
