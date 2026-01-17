@@ -1,5 +1,6 @@
 # Simuliamo una sala cinema 5x5 (Righe A-E, Colonne 1-5)
 # Esempio record: {"id": "A1", "row": "A", "number": 1, "is_booked": False}
+import pprint
 
 cinema_hall = []
 
@@ -21,3 +22,6 @@ def init_cinema():
 
 # Inizializziamo subito la sala
 init_cinema()
+pprint.pprint(cinema_hall)
+
+# TODO: scrivere la funzione di sopra senza for esplcito (list comprehension)
