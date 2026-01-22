@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException
-from ..database import cinema_hall, rows, cols
+from database import cinema_hall, rows
 import math
 
 router = APIRouter()
@@ -18,7 +18,9 @@ def get_available_seats():
     Restituisce tutti i posti liberi disponibili o lista vuota se finiti
     """
     return [row for row in cinema_hall if not row['is_booked']]
+    # Per "row" si intende la riga del DB e non della sala
 
+# TODO: Fare un metodo GET allo stesso endpoint che dica se il posto è libero o no
 @router.post("/book/{seat_id}")
 def book_seat(seat_id: str):
     # 1. Rendere l'id tutto maiuscolo (normalizzazione input)
@@ -58,9 +60,39 @@ def book_seat(seat_id: str):
 # 3. Facciamo una funzione che dia il miglior posto disponibile
 @router.get("/seats/best")
 def get_best_seat():
-    # TODO: importare anche rows e cols dal file con cinema_hall
     # TODO: far mettere all'utente un indice di tolleranza (alto, medio, basso)
-    ...
+    # 1. Calcoliamo i parametri da passare alla funzione gaussiana
+    media = (rows - 1) / 2
+    varianza = (rows - 1 - media) / 3  # TODO: rendere "variabile" il 3
+
+    # 2. Calcoliamo il punteggio di gradimento
+    # 2.1 Otteniamo i posti liberi
+    posti_liberi = [posto for posto in cinema_hall if not posto['is_booked']]
+
+    # 2.2 Calcoliamo il nostro punteggio su ogni posto
+    punteggio_max = (-1, -1)
+    i_max = 0
+    for i, posto in enumerate(posti_liberi):
+        x = posto['number'] - 1
+        punteggio_col = gaussiana(media, varianza, x)
+
+        r = posto['row']
+        punteggio_row = ord(r) - 65
+
+        if punteggio_col > punteggio_max[0]:
+            punteggio_max = (punteggio_col, punteggio_row)
+            i_max = i
+        elif punteggio_col == punteggio_max[0] and punteggio_row > punteggio_max[1]:
+            punteggio_max = (punteggio_col, punteggio_row)
+            i_max = i
+
+    if punteggio_max[0] != -1:
+        # Abbiamo trovato almeno un posto libero
+        return cinema_hall[i_max]
+
+    return {"message": "Non ci sono posti disponibili"}
+
+
 
 def gaussiana(media: float, var: float, x: float):
     primo_blocco = 1 / (var * math.sqrt(2 * math.pi))
@@ -68,11 +100,31 @@ def gaussiana(media: float, var: float, x: float):
 
     return primo_blocco * math.exp(esponente)
 
+# def print_grafico(m: float, v: float):
+#     asse_x = [i for i in range(int(2 * m + 1))]
+#     asse_y = [gaussiana(m, v, punto) for punto in asse_x]
+#
+#     # Fare il grafico
+#     plt.plot(asse_x, asse_y)
+#     plt.vlines(m, min(asse_y), max(asse_y), color="r")
+#
+#     plt.vlines(m-v, min(asse_y), max(asse_y), color="g")
+#     plt.vlines(m+v, min(asse_y), max(asse_y), color="g")
+#
+#     plt.vlines(m-2*v, min(asse_y), max(asse_y), color="g")
+#     plt.vlines(m+2*v, min(asse_y), max(asse_y), color="g")
+#
+#     plt.vlines(m-3*v, min(asse_y), max(asse_y), color="g")
+#     plt.vlines(m+3*v, min(asse_y), max(asse_y), color="g")
+#
+#     plt.show()
 
-
-
-
-
+# if __name__ == "__main__":
+#     # media + var * 3 = fila_max => var = (fila_max - media) / 3
+#     fila_max = 16
+#     m = (fila_max - 1) / 2
+#     v = (fila_max - 1 - m) / 5
+#     print_grafico(m, v * 0.95)
 
 
 

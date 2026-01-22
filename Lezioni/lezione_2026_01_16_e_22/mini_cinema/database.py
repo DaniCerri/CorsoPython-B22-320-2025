@@ -19,6 +19,7 @@ def init_cinema():
                 "number": c,
                 "is_booked": False
             })
+    return cinema_hall.copy()
 
 # Inizializziamo subito la sala
 init_cinema()
