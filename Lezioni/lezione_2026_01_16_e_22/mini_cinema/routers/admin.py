@@ -1,6 +1,4 @@
 from fastapi import APIRouter, HTTPException
-
-import database
 from database import cinema_hall, rows, cols, init_cinema
 import random
 random.seed(42)
@@ -11,10 +9,6 @@ router = APIRouter()
 def root():
     return {"message": "Benvenuto nel router di admin. Gli endpoint sono..."}
 
-# TODO: facciamo un endpoint /random-seed che sceglie un numero casuale di posti casuali e li prenota
-# prima di estrarre, prenotare etc, resettiamo cinema_hall (c'è una funzione da qualche parte)
-# random.choice sceglie uno o più elementi di una lista
-# random.sample sceglie un sottoinsieme casuale della lista
 @router.get("/random-seed")
 def random_seed():
     # 0. Resettiamo cinema_hall
