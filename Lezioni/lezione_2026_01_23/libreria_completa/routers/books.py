@@ -21,8 +21,32 @@ def get_complete_books():
         lista_completa.append(libro)
     return lista_completa
 
-@router.get("/{book_id}")
+@router.get("/{book_id}", response_model=schemas.LibroCompleto)
 def get_book(book_id: int):
-    ...
+    # 1. cerchiamo il libro dall'id
+    libro = None
+    for book in db.db_libri:
+        if book['id'] == book_id:
+            libro = book
+            break
+
+    # 2. Gestiamo il caso in cui non troviamo il libro (rimane None)
+    if not libro:
+        raise HTTPException(
+            status_code=404,
+            detail=f"Libro con id {book_id} non trovato"
+        )
+
+    # 3. Cerchiamo l'autore
+    autore = None
+    for author in db.db_autori:
+        if author['id'] == libro['id_author']:
+            autore = author
+            break
+
+    # 4. Mettiamo insieme i dati e li restituiamo
+    libro['author_data'] = autore
+
+    return libro
 
 
