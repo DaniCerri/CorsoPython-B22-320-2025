@@ -31,4 +31,14 @@ class FilmBase(BaseModel):
     duration: int  # In secondi, va bene anche in minuti
     imdb: float  # Voto del film secondo imdb
 
+class FilmCompleto(BaseModel): # Per come stiamo scrivendo il codice, questi parametri sono obbligatori
+    id: int
+    title: str
+    duration: int  # Durata del film in secondi (andava bene anche in minuti)
+    imdb: float  # Non sta a noi in questo file controllare l'integrità delle variabili
+    director: RegistaBase  # Mettiamo in questo campo tutti i dati del regista
+    actors: List[AttoreBase]  # All'interno di questo campo inseriamo una lista di attori
+
+class FilmGiornata(BaseModel):
+    lista_film: List[FilmCompleto]  # Abbiamo in mente che nella home del cinema si vedranno in dettaglio i film della giornata
 
