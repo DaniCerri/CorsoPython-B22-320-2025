@@ -1,0 +1,30 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'core/style.css' %}">
+    <title>Iscriviti</title>
+</head>
+
+<body>
+    <h1>Iscrizione</h1>
+    <p>Inserisici i tuoi per l'iscrizione</p>
+
+    <!-- Il tag form, per l'esercizio, è opzionale -->
+    <form method="POST">
+        {% csrf_token %}
+
+        <label>Nome: </label>
+        <input type="text" name="nome_form" placeholder="Mario Rossi">
+
+        <label>Email: </label>
+        <input type="email" name="email_form" placeholder="mario.rossi@email.com">
+
+        <button>Iscriviti</button>
+    </form>
+    <a href="{% url 'home' %}">Torna alla home</a>
+</body>
+
+</html>

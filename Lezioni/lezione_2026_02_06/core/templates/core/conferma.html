@@ -1,0 +1,20 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'core/style.css' %}">
+    <title>Conferma iscrizione</title>
+</head>
+<body>
+    <h1>Iscrizione completata!</h1>
+    <p>
+        Grazie, {{ nome_iscritto }} <br>
+        Siamo contenti che tu sia dei nostri!
+    </p>
+    <p>
+        Abbiamo inviato una mail di conferma a <strong>{{ email_iscritto }}</strong>
+    </p>
+    <a href="{% url 'home' %}">Torna alla home</a>
+</body>
+</html>
