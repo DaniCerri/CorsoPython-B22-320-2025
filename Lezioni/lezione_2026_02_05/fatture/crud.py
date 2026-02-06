@@ -20,11 +20,11 @@ def create_client(db: Session, client: schemas.ClientCreate):
     db.refresh(db_client)
     return db_client
 
-# TODO: limitare i client ricevuti con offset e limit
-def get_clients(db: Session):
-    return db.query(models.Client).all()
+def get_clients(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(models.Client).offset(skip).limit(limit).all()
 
-# TODO: fare una funzione che ottenga un client da ID
+def get_client_by_id(db: Session, client_id: int):
+    return db.query(models.Client).filter(models.Client.client_id == client_id).first()
 
 # =================== INVOICES ===================
 def create_invoice(db: Session, invoice: schemas.InvoiceCreate):
@@ -51,9 +51,10 @@ def create_invoice(db: Session, invoice: schemas.InvoiceCreate):
     db.refresh(db_invoice)
     return db_invoice
 
-# TODO: fare schema e funzione per ottenere un elenco di fatture
+def get_invoices(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(models.Invoice).offset(skip).limit(limit).all()
 
-def get_invoice_by_id(db: Session, invoice_id: int):
+def get_invoice(db: Session, invoice_id: int):
     return db.query(models.Invoice).filter(models.Invoice.invoice_id == invoice_id).first()
 
 # =================== ITEMS ===================
