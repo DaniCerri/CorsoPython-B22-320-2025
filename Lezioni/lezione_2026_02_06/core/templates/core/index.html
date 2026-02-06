@@ -1,0 +1,31 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'core/style.css' %}">
+    <title>Descrizione corso</title>
+</head>
+<body>
+    <h1>Corso: {{ nome_corso }}</h1>
+    {% if studenti > 0 %}
+        <p>Attualmente ci sono {{ studenti }} iscritti</p>
+    {% else %}
+        <p>Le iscrizioni sono aperte</p>
+    {% endif %}
+
+    <br>
+    <p><strong>Insegnante</strong>: {{ docente }}</p>
+    <p><strong>Linguaggio</strong>: {{ linguaggio }}</p>
+
+    <h2>Argomenti trattati</h2>
+    <ul>
+        {% for argomento in argomenti %}
+            <li>{{ argomento }}</li>
+        {% endfor %}
+    </ul>
+
+    <img src="{% static 'core/images/coding.jpg' %}"
+         alt="immagine coding" width="500px">
+</body>
+</html>
