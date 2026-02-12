@@ -199,9 +199,9 @@ def mini_calc(request):
     OPERAZIONI = {"sum", "sub", "mol", "div"}
 
     try:
-        num_a = float(request.data.get('a', 0))
-        num_b = float(request.data.get('b', 0))
-        operazione = request.data.get('operazione', "")
+        num_a = float(request.query_params.get('a', 0))
+        num_b = float(request.query_params.get('b', 0))
+        operazione = request.query_params.get('operazione', "")
 
         if operazione not in OPERAZIONI:
             return Response({"errore": f"l'operazione deve essere una tra {OPERAZIONI}"}, status=400)
@@ -230,8 +230,8 @@ def mini_calc(request):
     except ValueError:
         return Response({
             "errore": "Uno tra a e b (o entrambi) non è un numero",
-            "a_ottenuto": request.data.get('a', None),
-            "b_ottenuto": request.data.get('b', None)
+            "a_ottenuto": request.query_params.get('a', None),
+            "b_ottenuto": request.query_params.get('b', None)
         })
 
 
