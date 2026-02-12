@@ -126,3 +126,120 @@ def verifica_palindromo(request):
         "pulita": stringa,
         "passaggi": passaggi
     })
+
+# TODO: fare una funzione che prenda un deposito iniziale [€], un contributo mensile [€] e un tasso mensile [%]
+#   restituisce l'elenco mese per mese [(02, 2026), (03, 2026), ...] del valore del conto che tenga conto di incremento percentuale
+#   e dell'incremento dato dal versamento mensile del regime per 30 anni
+
+# es: conto_iniziale = 100, contributo_mensile: 10, tasso: 10%
+# mese 1 (03, 2026): abbiamo (100 + 10) * 1.1 = 121
+# mese 2 (04, 2026): abbiamo (121 + 10) * 1.1 = 144,1
+# ...
+
+@api_view(['POST'])
+def calcola_patrimonio(request):
+    date = datetime.now()
+    mese, anno = date.month + 1, date.year
+
+    anni = 30
+    mesi_durata = anni * 12
+
+    capitale_iniziale = request.data.get("capitale_inziale", 0)
+    contributo_mensile = request.data.get("contributo_mensile", 0)
+    tasso = request.data.get("tasso", 0) / 100 # -> Così otteniamo direttamente il coefficiente che ci piace
+
+    data = {
+        "mesi": [],
+        "patrimonio_inziale": capitale_iniziale,
+        "tasso": tasso,
+        "contributo_mensile": contributo_mensile,
+        "totale_versato": contributo_mensile * mesi_durata,
+        # Opzionalmente potete poi mettere anche lo scarto tra versato e guadagnato
+        "totale": 0
+    }
+
+    for mese_corrente in range(mese, mesi_durata + mese):
+        # mese_corrente += mese
+        mese_convertito = mese_corrente % 12
+        anno_convertito = mese_corrente // 12 + anno
+
+        patrimonio_iniziale = data['totale']
+        patrimonio = patrimonio_iniziale + contributo_mensile
+        patrimonio_a_fine_mese = patrimonio * (1 + tasso)
+
+        row = {
+            "id": f"({mese_convertito}, {anno_convertito})",
+            "patrimonio": patrimonio_a_fine_mese
+        }
+
+        data['totale'] = patrimonio_a_fine_mese
+        data['mesi'].append(row)
+
+    return Response(data)
+
+# il numero di cui calcolare la tabellina verrà poi passato attraverso la path dell'endpoint
+# -> in fastapi scrivevamo @app.get("/percorso/{numero}")
+# NB: La tipologia della variabile in fastAPI la avremmo scritta nella dichiarazione della funzione
+# -> def funzione(..., numero: int)
+@api_view(['GET'])
+def genera_tabellina(request, base):
+    tabellina = [base * i for i in range(1, 11)]
+
+    return Response({
+        "numero": base,
+        "tabellina": tabellina,
+        "formula": f"{base} * n, con n = 1, ..., 10"
+    })
+
+@api_view(['GET'])
+def mini_calc(request):
+    # es di richiesta: path/mini-calc?a=N&b=M
+    # Senza la "&" avremmo solo un parametro a con il valore "Nb=M"
+    # convertendo la query in path avremmo avuto -> path/mini-calc/<float:a>/<float:b>
+    OPERAZIONI = {"sum", "sub", "mol", "div"}
+
+    try:
+        num_a = float(request.data.get('a', 0))
+        num_b = float(request.data.get('b', 0))
+        operazione = request.data.get('operazione', "")
+
+        if operazione not in OPERAZIONI:
+            return Response({"errore": f"l'operazione deve essere una tra {OPERAZIONI}"}, status=400)
+
+        if operazione == "div" and num_b == 0:
+            return Response({"errore": "Non si può dividere per 0"}, status=400)
+
+        if operazione == "sum":
+            risultato = num_a + num_b
+        elif operazione == "sub":
+            risultato = num_a - num_b
+        elif operazione == "molt":
+            risultato = num_a * num_b
+        else:
+            risultato = num_a / num_b
+
+        return Response(
+            {
+                "operazione": f"Operazione da fare: {operazione}",
+                "a": num_a,
+                "b": num_b,
+                "totale": risultato
+            }
+        )
+
+    except ValueError:
+        return Response({
+            "errore": "Uno tra a e b (o entrambi) non è un numero",
+            "a_ottenuto": request.data.get('a', None),
+            "b_ottenuto": request.data.get('b', None)
+        })
+
+
+
+
+
+
+
+
+
+
