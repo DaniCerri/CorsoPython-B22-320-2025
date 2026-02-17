@@ -2,9 +2,15 @@ from rest_framework import serializers
 from .models import Dispositivo, Luogo, Manutenzione
 
 class LuogoSerializer(serializers.ModelSerializer):
+    numero_dispositivi = serializers.SerializerMethodField()
+
     class Meta:
         model = Luogo
-        fields = "__all__"  # Prende tutti i campi disponibili
+        fields = ['id', 'nome', 'piano', 'note', 'numero_dispositivi']  # Prende tutti i campi disponibili
+
+    def get_numero_dispositivi(self, obj):
+        return obj.dispositivi.count()
+
 
 class ManutenzioneSerializer(serializers.ModelSerializer):
     class Meta:
@@ -12,9 +18,15 @@ class ManutenzioneSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 class DispositivoSerializer(serializers.ModelSerializer):
+    # Dobbiamo spiegare a Django che le colonne costo_totale e numero_interventi sono calcolate e non nel DB
+    costo_totale = serializers.SerializerMethodField()
+    # NB: 'costo_totale' deve essere lo stesso nome che usiamo per l'attributo nella classe, nome della colonna e sotto
+    # in get_<ATTRIBUTO>() <- get_costo_totale
+    numero_interventi = serializers.SerializerMethodField()
+
     class Meta:
         model = Dispositivo
-        fields = ['id', 'codice', 'luogo', 'stato_operativo', 'costo_totale', 'numero_manutenzioni']
+        fields = ['id', 'codice', 'luogo', 'stato_operativo', 'costo_totale', 'numero_interventi']
         # fields = [
         #     'id',  # Un ID che si aspetta di default Django per identificare la riga
         #     'codice',

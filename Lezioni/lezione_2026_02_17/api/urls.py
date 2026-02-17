@@ -6,7 +6,7 @@ from .views import DispositivoViewSet, LuogoViewSet, ManutenzioneViewSet
 router = DefaultRouter()
 
 # 2. definiamo il gruppo di endpoint legati al 'Dispositivo'
-router.register(r'dispositivi', DispositivoViewSet)
+router.register(r'dispositivi', DispositivoViewSet, basename='dispositivo')
 router.register(r'luoghi', LuogoViewSet)
 router.register(r'manutenzioni', ManutenzioneViewSet)
 # La r davanti alla stringa dice a python di prendere quella stringa "raw" cioè senza sequenze di escape come ad esempio \n \s \t
