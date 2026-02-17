@@ -8,6 +8,13 @@ class Luogo(models.Model):
     def __str__(self):
         return f"{self.nome} (Piano {self.piano})"
 
+class Software(models.Model):
+    nome = models.CharField(max_length=100)
+    versione = models.CharField(max_length=50)
+
+    def __str__(self):
+        return f"{self.nome} v.{self.versione}"
+
 class Dispositivo(models.Model):
     luogo = models.ForeignKey(
         Luogo,
@@ -16,6 +23,13 @@ class Dispositivo(models.Model):
         # viene impostato il valore a null
         blank=True,
         related_name='dispositivi'
+    )
+
+    software_installati = models.ManyToManyField(
+        Software,
+        blank=True,
+        related_name='dispositivi',
+        # Non mettiamo "on_delete" perchè chiaramente cancellare un software non vuol dire cancellare un dispositivo
     )
 
     codice = models.CharField(max_length=50, unique=True)  # Identificativo
