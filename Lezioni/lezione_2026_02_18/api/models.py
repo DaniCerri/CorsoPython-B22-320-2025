@@ -33,10 +33,12 @@ class Corso(models.Model):
         related_name='corsi_insegnati'
     )
 
-    # Foreign Key N:N
+    # Foreign Key N:N -> Django genera automaticamente una tabella nel DB per
+    # gestire questa relazione
     studenti = models.ManyToManyField(
         Studente,
         blank=True,
+        null=True,
         related_name='corsi_seguiti'
     )
 
