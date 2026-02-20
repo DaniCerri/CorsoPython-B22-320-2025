@@ -2,7 +2,7 @@ Facciamo un backend per la gestione di corsi, professori e studenti
 universitari.
 
 Abbiamo da registrare le seguenti entità:
-  - Professori: nome, cognome, data di nascita, settore <- Non è necessaria la tabella ssettori
+  - Professori: nome, cognome, data di nascita, settore <- Non è necessaria la tabella settori
   - Studenti: matricola, nome, cognome, data di nascita
   - Corsi: codice, nome, crediti
 
