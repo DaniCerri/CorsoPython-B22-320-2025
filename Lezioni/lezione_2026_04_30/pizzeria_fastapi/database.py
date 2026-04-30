@@ -5,7 +5,7 @@ from sqlalchemy.orm import sessionmaker
 # 1. Definiamo la stringa di connessione al DB
 # DATABASE_URL = "linguaggioSQL+motore://nome_utente:password_db@ip_host_db:porta_server_db/nome_db"
 # TODO: mettere questo url in un file .env
-DATABASE_URL = "mysql+pymysql://root:@localhost:3306/pizzeria"
+DATABASE_URL = "mysql+pymysql://root:@localhost:3306/db_pizzeria"
 
 # 2. Creiamo l'engine -> ci connettiamo al DB
 engine = create_engine(
